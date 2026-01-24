@@ -19,6 +19,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping
+    // ADICIONADO <Transaction> PARA O SWAGGER NÃO DAR ERRO 500
     public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO transaction) throws Exception {
         Transaction newTransaction = this.transactionService.createTransaction(transaction);
         return new ResponseEntity<>(newTransaction, HttpStatus.OK);

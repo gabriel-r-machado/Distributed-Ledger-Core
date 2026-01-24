@@ -54,7 +54,7 @@ class TransactionServiceTest {
         sender.setUserType(UserType.COMMON);
         sender.setWallet(new Wallet("wallet1", new BigDecimal(100), sender));
 
-        // 2. Criamos o Receiver (Recebedor) com setters
+        // 2. O Receiver (Recebedor) com setters
         User receiver = new User();
         receiver.setId("2");
         receiver.setFirstName("Joao");
@@ -64,7 +64,7 @@ class TransactionServiceTest {
         receiver.setUserType(UserType.COMMON);
         receiver.setWallet(new Wallet("wallet2", new BigDecimal(100), receiver));
 
-        // 3. Ensinamos o Mockito
+        // 3. Ensinei o Mockito
         when(userService.findUserById("1")).thenReturn(sender);
         when(userService.findUserById("2")).thenReturn(receiver);
 

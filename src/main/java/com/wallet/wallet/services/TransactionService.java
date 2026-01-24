@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Map; 
+import java.util.Map;
 
 @Service
 public class TransactionService {
@@ -56,26 +56,23 @@ public class TransactionService {
         return newTransaction;
     }
 
-public boolean authorizeTransaction(User sender, BigDecimal value){
+public boolean authorizeTransaction(User sender, BigDecimal value) {
         String url = "https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc";
 
         try {
-            // Tenta ir na internet consultar
-            ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity(url, Map.class);
+            @SuppressWarnings("unchecked")
+            ResponseEntity<Map<String, Object>> authorizationResponse = restTemplate.getForEntity(url, (Class<Map<String, Object>>)(Class<?>)Map.class);
 
-            if(authorizationResponse.getStatusCode() == HttpStatus.OK){
+            // Verificação de segurança para evitar NullPointerException
+            if (authorizationResponse.getStatusCode() == HttpStatus.OK && authorizationResponse.getBody() != null) {
                 String message = (String) authorizationResponse.getBody().get("message");
                 return "Autorizado".equalsIgnoreCase(message);
             } else {
                 return false;
             }
         } catch (Exception e) {
-            
-            System.out.println("⚠️ Erro na autorização externa (API Fora do Ar ou SSL): " + e.getMessage());
-            System.out.println("✅ Autorizando transação por Fallback.");
-            
-            // Retorna TRUE para não travar a venda do cliente
-            return true;
+            System.out.println("⚠️ Erro na autorização externa: " + e.getMessage());
+            return true; // Fallback
         }
     }
 }

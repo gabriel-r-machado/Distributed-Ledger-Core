@@ -1,23 +1,19 @@
 package com.wallet.wallet.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnore; // <--- NÃO ESQUEÇA ESSE IMPORT
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.math.BigDecimal;
 
-@Entity(name = "wallets")
-@Table(name = "wallets")
+@Entity(name="wallets")
+@Table(name="wallets")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of="id")
 public class Wallet {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -26,6 +22,11 @@ public class Wallet {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @JsonIgnore  // <--- O SEGREDO PRA CONSERTAR O SWAGGER
     private User user;
+    
+    public Wallet(BigDecimal balance, User user){
+        this.balance = balance;
+        this.user = user;
+    }
 }

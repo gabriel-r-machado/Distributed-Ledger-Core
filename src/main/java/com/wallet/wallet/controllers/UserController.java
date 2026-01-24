@@ -10,21 +10,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("/users")
 public class UserController {
-
+    
     @Autowired
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO user){
+    // O SWAGGER EXIGE O <User> AQUI PARA SABER O QUE MOSTRAR NA TELA
+    public ResponseEntity<User> createUser(@RequestBody UserDTO user){ 
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    // O SWAGGER EXIGE O <List<User>> AQUI
+    public ResponseEntity<List<User>> getAllUsers(){ 
         List<User> users = this.userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
