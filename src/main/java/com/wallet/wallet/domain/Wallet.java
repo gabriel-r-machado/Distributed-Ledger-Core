@@ -1,5 +1,8 @@
 package com.wallet.wallet.domain;
 
+// Adicione esta importação manualmente se o VS Code não puxar
+import com.fasterxml.jackson.annotation.JsonIgnore; 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +22,10 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    // Regra de Ouro: Dinheiro SEMPRE use BigDecimal. Nunca Double (dá erro de arredondamento).
-    private BigDecimal balance = BigDecimal.ZERO; // Começa com zero
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToOne
-    @JoinColumn(name = "user_id") // Cria a coluna user_id na tabela wallet
+    @JoinColumn(name = "user_id")
+    @JsonIgnore  // <--- O SEGREDO ESTÁ AQUI!
     private User user;
 }
