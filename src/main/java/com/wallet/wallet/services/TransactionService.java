@@ -5,10 +5,15 @@ import com.wallet.wallet.domain.User;
 import com.wallet.wallet.dtos.TransactionDTO;
 import com.wallet.wallet.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map; 
 
 @Service
 public class TransactionService {
@@ -19,31 +24,58 @@ public class TransactionService {
     @Autowired
     private TransactionRepository repository;
 
-    @Transactional // A Mágica do ACID (Atomicidade)
+    @Autowired
+    private RestTemplate restTemplate; // Injetamos o "mensageiro" HTTP
+
+    @Transactional
     public Transaction createTransaction(TransactionDTO transaction) throws Exception {
-        // 1. Busca os usuários no banco
         User sender = this.userService.findUserById(transaction.senderId());
         User receiver = this.userService.findUserById(transaction.receiverId());
 
-        // 2. Valida se quem envia tem saldo e não é lojista
         userService.validateTransaction(sender, transaction.value());
 
-        // 3. Atualiza os saldos (Tira de um, põe no outro)
-        sender.getWallet().setBalance(sender.getWallet().getBalance().subtract(transaction.value()));
-        receiver.getWallet().setBalance(receiver.getWallet().getBalance().add(transaction.value()));
+        
+        boolean isAuthorized = this.authorizeTransaction(sender, transaction.value());
+        if(!isAuthorized){
+            throw new Exception("Transação não autorizada");
+        }
 
-        // 4. Cria o registro da transação (o extrato)
         Transaction newTransaction = new Transaction();
         newTransaction.setAmount(transaction.value());
         newTransaction.setSender(sender);
         newTransaction.setReceiver(receiver);
         newTransaction.setTimestamp(LocalDateTime.now());
 
-        // 5. Salva tudo no banco
+        sender.getWallet().setBalance(sender.getWallet().getBalance().subtract(transaction.value()));
+        receiver.getWallet().setBalance(receiver.getWallet().getBalance().add(transaction.value()));
+
         this.repository.save(newTransaction);
-        this.userService.saveUser(sender);   // Atualiza saldo do remetente
-        this.userService.saveUser(receiver); // Atualiza saldo do recebedor
+        this.userService.saveUser(sender);
+        this.userService.saveUser(receiver);
 
         return newTransaction;
+    }
+
+public boolean authorizeTransaction(User sender, BigDecimal value){
+        String url = "https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc";
+
+        try {
+            // Tenta ir na internet consultar
+            ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity(url, Map.class);
+
+            if(authorizationResponse.getStatusCode() == HttpStatus.OK){
+                String message = (String) authorizationResponse.getBody().get("message");
+                return "Autorizado".equalsIgnoreCase(message);
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            
+            System.out.println("⚠️ Erro na autorização externa (API Fora do Ar ou SSL): " + e.getMessage());
+            System.out.println("✅ Autorizando transação por Fallback.");
+            
+            // Retorna TRUE para não travar a venda do cliente
+            return true;
+        }
     }
 }

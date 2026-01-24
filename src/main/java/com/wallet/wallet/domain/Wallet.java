@@ -1,7 +1,7 @@
 package com.wallet.wallet.domain;
 
-// Adicione esta importação manualmente se o VS Code não puxar
-import com.fasterxml.jackson.annotation.JsonIgnore; 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +26,6 @@ public class Wallet {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore  // <--- O SEGREDO ESTÁ AQUI!
+    @JsonIgnore
     private User user;
 }

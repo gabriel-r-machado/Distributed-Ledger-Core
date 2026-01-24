@@ -29,9 +29,9 @@ public class User {
     private String firstName;
     private String lastName;
 
-    private String password; // Em um app real, isso seria hashado!
+    private String password;
 
-    // Vamos criar um Enum para diferenciar Lojista de Usuário Comum
+    // criar um Enum para diferenciar Lojista de Usuário Comum
     @Enumerated(EnumType.STRING)
     private UserType userType;
 

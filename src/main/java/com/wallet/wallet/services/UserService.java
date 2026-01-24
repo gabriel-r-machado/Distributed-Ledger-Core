@@ -22,7 +22,7 @@ public class UserService {
             throw new Exception("Usuário do tipo Lojista não está autorizado a realizar transação");
         }
 
-        // CORREÇÃO 1: Buscamos o saldo dentro da carteira (getWallet().getBalance())
+        //Buscamos o saldo dentro da carteira (getWallet().getBalance())
         if(sender.getWallet().getBalance().compareTo(amount) < 0){
             throw new Exception("Saldo insuficiente");
         }
@@ -41,7 +41,7 @@ public class UserService {
         newUser.setPassword(data.password());
         newUser.setUserType(data.userType());
 
-        // CORREÇÃO 2: Criamos a carteira, colocamos o saldo e vinculamos ao usuário
+        // Criam a carteira, colocamos o saldo e vinculamos ao usuário
         Wallet newWallet = new Wallet();
         newWallet.setBalance(data.balance()); // Pega o saldo do DTO
         newWallet.setUser(newUser); // Diz que essa carteira é desse usuário

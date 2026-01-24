@@ -3,7 +3,7 @@ package com.wallet.wallet.dtos;
 import com.wallet.wallet.domain.UserType;
 import java.math.BigDecimal;
 
-// Record: O Java cria getters, equals, hashcode e toString automaticamente.
+// cria getters, equals, hashcode e toString automaticamente.
 public record UserDTO(
     String firstName, 
     String lastName, 
