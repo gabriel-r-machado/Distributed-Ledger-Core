@@ -24,16 +24,21 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                // Libera Swagger e API Documentation
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                // LIBERA TUDO DO SWAGGER (Caminho antigo e novo)
+                .requestMatchers(
+                    "/v3/api-docs/**", 
+                    "/api-docs/**", 
+                    "/swagger-ui/**", 
+                    "/swagger-ui.html"
+                ).permitAll()
                 
-                // Libera Health Check da AWS (Elastic Beanstalk)
+                // LIBERA O HEALTH CHECK DA AWS
                 .requestMatchers("/actuator/**").permitAll()
                 
-                // Libera endpoints da API (MVP - TODO: Implementar JWT)
+                // LIBERA SEUS ENDPOINTS (MVP - TODO: Implementar JWT)
                 .requestMatchers("/users/**", "/transactions/**").permitAll()
                 
-                // Qualquer outra requisição precisa autenticação
+                // O RESTO PRECISA DE LOGIN
                 .anyRequest().authenticated()
             );
         
