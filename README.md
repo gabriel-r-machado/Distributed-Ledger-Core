@@ -4,9 +4,12 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-brightgreen?style=flat&logo=spring)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat&logo=postgresql)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
+[![AWS](https://img.shields.io/badge/AWS-Production-FF9900?style=flat&logo=amazonaws)](http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com/swagger-ui/index.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 Production-ready digital wallet REST API with pessimistic locking for concurrent transaction handling, circuit breaker patterns for external service resilience, and cloud-native architecture.
+
+**🌐 Live Production:** [http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com](http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com/swagger-ui/index.html)
 
 ---
 
@@ -111,10 +114,15 @@ docker-compose up -d
 docker-compose logs -f app
 ```
 
-**Access:**
+**Access (Local):**
 - API: http://localhost:8081
 - Swagger: http://localhost:8081/swagger-ui.html
 - Health: http://localhost:8081/actuator/health
+
+**Access (Production - AWS):**
+- 🌐 API: http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com
+- 📚 Swagger/API Docs: http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com/swagger-ui/index.html
+- 💚 Health Check: http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com/actuator/health
 
 ### Run Locally
 
@@ -245,19 +253,25 @@ Content-Type: application/json
 
 ## AWS Deployment
 
-### Architecture (Free Tier)
+### 🚀 Currently Running in Production
+
+**Live Environment:** http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com
+
+### Architecture (AWS Free Tier)
 
 ```
-┌──────────────────────────┐
-│  EC2 (t2.micro) / EB     │  ← Docker Container
-└──────────┬───────────────┘
+┌──────────────────────────────────────┐
+│  Elastic Beanstalk (t2.micro)        │  ← Docker Container (wallet-prod)
+│  US-East-2 (Ohio)                    │
+└──────────┬───────────────────────────┘
            │
-┌──────────▼───────────────┐
-│  RDS PostgreSQL          │  ← db.t3.micro, 20GB
-└──────────────────────────┘
+┌──────────▼───────────────────────────┐
+│  RDS PostgreSQL                      │  ← db.t3.micro, 20GB
+│  Multi-AZ disabled (cost savings)    │
+└──────────────────────────────────────┘
 ```
 
-### Quick Deploy
+### Deployment Guide
 
 **Summary:**
 
