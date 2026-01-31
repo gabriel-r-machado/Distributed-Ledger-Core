@@ -31,3 +31,30 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Security - Environment Variables ###
+.env
+.env.local
+.env.*.local
+**/*.env
+**/*.env.local
+
+### Logs ###
+*.log
+logs/
+app.log
+output.log
+
+### Temporary Test Files ###
+test_*.txt
+test_results*.txt
+all_tests*.txt
+*_final.txt
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Cleanup Scripts (Optional - comment out if you want to include them) ###
+# cleanup.ps1
+# cleanup.sh

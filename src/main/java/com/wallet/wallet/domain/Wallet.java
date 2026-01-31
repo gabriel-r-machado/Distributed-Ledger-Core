@@ -1,6 +1,6 @@
 package com.wallet.wallet.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore; // <--- NÃO ESQUEÇA ESSE IMPORT
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ public class Wallet {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore  // <--- O SEGREDO PRA CONSERTAR O SWAGGER
+    @JsonIgnore
     private User user;
     
     public Wallet(BigDecimal balance, User user){

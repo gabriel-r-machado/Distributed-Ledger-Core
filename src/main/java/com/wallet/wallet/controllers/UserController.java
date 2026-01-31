@@ -3,6 +3,7 @@ package com.wallet.wallet.controllers;
 import com.wallet.wallet.domain.User;
 import com.wallet.wallet.dtos.UserDTO;
 import com.wallet.wallet.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    // O SWAGGER EXIGE O <User> AQUI PARA SABER O QUE MOSTRAR NA TELA
-    public ResponseEntity<User> createUser(@RequestBody UserDTO user){ 
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO user){ 
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    // O SWAGGER EXIGE O <List<User>> AQUI
     public ResponseEntity<List<User>> getAllUsers(){ 
         List<User> users = this.userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) throws Exception {
+        User user = this.userService.findUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

@@ -6,6 +6,7 @@ import com.wallet.wallet.domain.Wallet;
 import com.wallet.wallet.dtos.UserDTO;
 import com.wallet.wallet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,12 +18,26 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void validateTransaction(User sender, BigDecimal amount) throws Exception {
-        if(sender.getUserType() == UserType.MERCHANT){
+        if (sender == null) {
+            throw new Exception("Usuário remetente não pode ser nulo");
+        }
+        
+        if (sender.getUserType() == UserType.MERCHANT){
             throw new Exception("Usuário do tipo Lojista não está autorizado a realizar transação");
         }
 
-        //Buscamos o saldo dentro da carteira (getWallet().getBalance())
+        if (sender.getWallet() == null) {
+            throw new Exception("Carteira do usuário não encontrada");
+        }
+
+        if (sender.getWallet().getBalance() == null) {
+            throw new Exception("Saldo da carteira não disponível");
+        }
+
         if(sender.getWallet().getBalance().compareTo(amount) < 0){
             throw new Exception("Saldo insuficiente");
         }
@@ -38,15 +53,17 @@ public class UserService {
         newUser.setLastName(data.lastName());
         newUser.setDocument(data.document());
         newUser.setEmail(data.email());
-        newUser.setPassword(data.password());
+        
+        String hashedPassword = passwordEncoder.encode(data.password());
+        newUser.setPassword(hashedPassword);
+        
         newUser.setUserType(data.userType());
 
-        // Criam a carteira, colocamos o saldo e vinculamos ao usuário
         Wallet newWallet = new Wallet();
-        newWallet.setBalance(data.balance()); // Pega o saldo do DTO
-        newWallet.setUser(newUser); // Diz que essa carteira é desse usuário
+        newWallet.setBalance(data.balance());
+        newWallet.setUser(newUser);
         
-        newUser.setWallet(newWallet); // Diz que esse usuário tem essa carteira
+        newUser.setWallet(newWallet);
 
         this.saveUser(newUser);
         return newUser;

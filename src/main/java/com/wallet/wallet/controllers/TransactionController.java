@@ -3,6 +3,7 @@ package com.wallet.wallet.controllers;
 import com.wallet.wallet.domain.Transaction;
 import com.wallet.wallet.dtos.TransactionDTO;
 import com.wallet.wallet.services.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping
-    // ADICIONADO <Transaction> PARA O SWAGGER NÃO DAR ERRO 500
-    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO transaction) throws Exception {
+    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transaction) throws Exception {
         Transaction newTransaction = this.transactionService.createTransaction(transaction);
         return new ResponseEntity<>(newTransaction, HttpStatus.OK);
     }
