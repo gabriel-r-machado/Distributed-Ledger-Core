@@ -77,7 +77,7 @@ COMMIT;
 | **Containerization** | Docker + Compose | - |
 | **Resilience** | Resilience4j | 2.1.0 |
 | **Security** | Spring Security (BCrypt) | 6.x |
-| **Docs** | SpringDoc OpenAPI | 2.3.0 |
+| **Docs** | SpringDoc OpenAPI | 2.8.3 |
 | **Monitoring** | Spring Actuator | - |
 | **Testing** | JUnit 5, Mockito, Testcontainers | - |
 | **Cloud** | AWS EC2, RDS, Elastic Beanstalk | - |
@@ -95,8 +95,8 @@ COMMIT;
 ### Clone & Configure
 
 ```bash
-git clone https://github.com/your-username/wallet-api.git
-cd wallet-api
+git clone https://github.com/gabriel-r-machado/wallet.git
+cd wallet
 
 # Create .env file (see .env.example)
 cp .env.example .env
@@ -269,7 +269,7 @@ Content-Type: application/json
 ```bash
 # Docker on EC2
 docker run -d \
-  -p 8080:8080 \
+  -p 8081:8080 \
   -e DB_URL=jdbc:postgresql://rds-endpoint:5432/wallet_db \
   -e DB_USER=admin \
   -e DB_PASSWORD=secure_password \
