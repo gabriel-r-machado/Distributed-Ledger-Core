@@ -37,9 +37,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Grant execute permission for mvnw
+      run: chmod +x mvnw
+
     - name: Build with Maven
-      # Roda os testes, mas ignora falhas de teste APENAS se você quiser debugar. 
-      # Para produção, remova o -Dmaven.test.failure.ignore=true
       run: ./mvnw -B package --file pom.xml
 
     - name: Publish Test Report
