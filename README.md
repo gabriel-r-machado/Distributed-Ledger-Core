@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# 💳 Wallet API - Digital Wallet System
+# 🏦 Distributed Ledger Core - High-Performance Financial Engine
 
 [![Java](https://img.shields.io/badge/Java-21-orange?style=flat&logo=openjdk)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-brightgreen?style=flat&logo=spring)](https://spring.io/projects/spring-boot)
