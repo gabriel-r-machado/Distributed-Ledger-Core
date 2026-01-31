@@ -24,7 +24,16 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()
+                // Libera Swagger e API Documentation
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
+                // Libera Health Check da AWS (Elastic Beanstalk)
+                .requestMatchers("/actuator/**").permitAll()
+                
+                // Libera endpoints da API (MVP - TODO: Implementar JWT)
+                .requestMatchers("/users/**", "/transactions/**").permitAll()
+                
+                // Qualquer outra requisição precisa autenticação
                 .anyRequest().authenticated()
             );
         
