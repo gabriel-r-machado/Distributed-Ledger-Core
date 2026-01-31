@@ -1,13 +1,12 @@
-# 🏦 Distributed Ledger Core - High-Performance Financial Engine
+# 🏦 Digital Wallet API - High-Performance Financial Engine
 
 [![Java](https://img.shields.io/badge/Java-21-orange?style=flat&logo=openjdk)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-brightgreen?style=flat&logo=spring)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat&logo=postgresql)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
-[![AWS](https://img.shields.io/badge/AWS-Free%20Tier-FF9900?style=flat&logo=amazonaws)](https://aws.amazon.com/)
-![Build Status](https://github.com/gabriel-r-machado/Distributed-Ledger-Core/actions/workflows/deploy.yml/badge.svg)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
-Production-ready digital wallet API with pessimistic locking for concurrent transaction handling, circuit breaker patterns for external service resilience, and cloud-native architecture.
+Production-ready digital wallet REST API with pessimistic locking for concurrent transaction handling, circuit breaker patterns for external service resilience, and cloud-native architecture.
 
 ---
 
@@ -96,8 +95,8 @@ COMMIT;
 ### Clone & Configure
 
 ```bash
-git clone https://github.com/gabriel-r-machado/wallet.git
-cd wallet
+git clone https://github.com/gabriel-r-machado/Distributed-Ledger-Core.git
+cd Distributed-Ledger-Core
 
 # Create .env file (see .env.example)
 cp .env.example .env
@@ -281,24 +280,42 @@ docker run -d \
 
 ## Security
 
-### Implemented
+### ✅ Currently Implemented
 
-- BCrypt password hashing (strength 10)
-- Environment variables for credentials
-- CORS configured
-- Centralized exception handling
-- Bean Validation on all endpoints
-- Non-root Docker user
-- Sanitized logs (sensitive data masking)
+- **Password Security:** BCrypt hashing (strength 10)
+- **Configuration:** Environment variables for sensitive credentials
+- **CORS:** Properly configured for cross-origin requests
+- **Exception Handling:** Centralized error responses (no stack traces exposed)
+- **Input Validation:** Bean Validation (@Valid) on all endpoints
+- **Container Security:** Non-root Docker user
+- **Logging:** Sanitized logs (no sensitive data exposure)
+
+### ⚠️ MVP Limitations
+
+- Authentication is disabled for development (`permitAll()` in SecurityConfig)
+- No API rate limiting yet
+- HTTPS not configured (use reverse proxy in production)
 
 ### 🚀 Roadmap & Future Improvements
 
-While the current MVP demonstrates core architectural resilience, the following features are planned for the V2 release:
+> ⚠️ **Status:** This is an actively developed MVP demonstrating core architectural patterns for high-concurrency financial systems.
 
-- [ ] **Security:** Migrate from Basic Auth to **OAuth2/JWT** via Keycloak.
-- [ ] **Infrastructure:** Configure SSL/TLS (HTTPS) using AWS ACM or Let's Encrypt.
-- [ ] **Resilience:** Implement Rate Limiting using Bucket4j.
-- [ ] **Observability:** Create detailed dashboards in Grafana/Prometheus.
+While the current implementation successfully handles concurrent transactions with pessimistic locking and circuit breaker patterns, the following features are planned:
+
+**Security Enhancements:**
+- [ ] Migrate from Basic Auth to **OAuth2/JWT** with Spring Security
+- [ ] Add API key authentication for service-to-service communication
+- [ ] Implement SSL/TLS (HTTPS) using AWS ACM or Let's Encrypt
+
+**Resilience & Performance:**
+- [ ] Add Rate Limiting using Bucket4j
+- [ ] Implement caching layer with Redis
+- [ ] Add message queue (RabbitMQ/Kafka) for async processing
+
+**Observability:**
+- [ ] Integration with Prometheus + Grafana dashboards
+- [ ] Distributed tracing with OpenTelemetry
+- [ ] Enhanced logging with ELK Stack
 
 ---
 
@@ -332,7 +349,7 @@ docker logs -f wallet-api
 ## Project Structure
 
 ```
-wallet/
+Distributed-Ledger-Core/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/wallet/wallet/
@@ -341,13 +358,20 @@ wallet/
 │   │   │   ├── repositories/     # Data access
 │   │   │   ├── domain/           # Entities
 │   │   │   ├── dtos/             # Data transfer objects
-│   │   │   └── infra/            # Configuration
+│   │   │   └── infra/            # Configuration, security
 │   │   └── resources/
 │   │       └── application.properties
 │   └── test/
+│       ├── java/com/wallet/wallet/services/
+│       └── resources/
+├── docs/
+│   ├── PESSIMISTIC_LOCK_TESTING.md
+│   └── RESILIENCE.md
 ├── docker-compose.yml
 ├── Dockerfile
 ├── pom.xml
+├── test-concurrency.ps1
+├── test-concurrency.sh
 └── README.md
 ```
 
