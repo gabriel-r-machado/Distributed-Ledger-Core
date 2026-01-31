@@ -1,0 +1,49 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Grant execute permission for mvnw
+      run: chmod +x mvnw
+    
+    - name: Build with Maven
+      run: ./mvnw clean package -DskipTests
+    
+    - name: Generate deployment timestamp
+      id: timestamp
+      run: echo "version=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+    
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v22
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: wallet-prod
+        environment_name: wallet-prod
+        region: us-east-2
+        version_label: wallet-${{ steps.timestamp.outputs.version }}
+        deployment_package: target/wallet-0.0.1-SNAPSHOT.jar
+        wait_for_deployment: true
+        wait_for_environment_recovery: 300
+    
+    - name: Verify deployment
+      run: |
+        echo "✅ Deployment completed!"
+        echo "🔗 API: http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com"
+        echo "📚 Swagger: http://wallet-prod.eba-myky7k43.us-east-2.elasticbeanstalk.com/swagger-ui.html"
