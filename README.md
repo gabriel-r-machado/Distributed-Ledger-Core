@@ -361,7 +361,7 @@ Fork, branch, commit, push, pull request.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - see [LICENSE](LICENSE.md) file.
 
 ---
 
