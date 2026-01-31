@@ -5,6 +5,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat&logo=postgresql)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
 [![AWS](https://img.shields.io/badge/AWS-Free%20Tier-FF9900?style=flat&logo=amazonaws)](https://aws.amazon.com/)
+![Build Status](https://github.com/gabriel-r-machado/Distributed-Ledger-Core/actions/workflows/deploy.yml/badge.svg)
 
 Production-ready digital wallet API with pessimistic locking for concurrent transaction handling, circuit breaker patterns for external service resilience, and cloud-native architecture.
 
@@ -290,14 +291,14 @@ docker run -d \
 - Non-root Docker user
 - Sanitized logs (sensitive data masking)
 
-### Production Checklist
+### 🚀 Roadmap & Future Improvements
 
-- [ ] Implement JWT or OAuth2
-- [ ] Enable HTTPS (Let's Encrypt + Nginx)
-- [ ] Add rate limiting
-- [ ] Implement audit logs
-- [ ] Configure WAF
-- [ ] Add 2FA for critical operations
+While the current MVP demonstrates core architectural resilience, the following features are planned for the V2 release:
+
+- [ ] **Security:** Migrate from Basic Auth to **OAuth2/JWT** via Keycloak.
+- [ ] **Infrastructure:** Configure SSL/TLS (HTTPS) using AWS ACM or Let's Encrypt.
+- [ ] **Resilience:** Implement Rate Limiting using Bucket4j.
+- [ ] **Observability:** Create detailed dashboards in Grafana/Prometheus.
 
 ---
 
@@ -360,7 +361,7 @@ Fork, branch, commit, push, pull request.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - see [LICENSE](LICENSE.md) file.
 
 ---
 
